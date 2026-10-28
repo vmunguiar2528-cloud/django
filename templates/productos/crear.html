@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Nuevo producto{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<div class="erp-card">
+    <div class="erp-card-header">Registrar producto</div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Guardar producto</button>
+        <a class="btn btn-link" href="{% url 'productos:lista' %}">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

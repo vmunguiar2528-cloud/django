@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ producto.nombre }}{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<div class="erp-card">
+    <div class="erp-card-header">Detalle del producto</div>
+    <h1 class="h2">{{ producto.nombre }}</h1>
+    <dl class="row">
+        <dt class="col-sm-3">Categoría</dt><dd class="col-sm-9">{{ producto.categoria }}</dd>
+        <dt class="col-sm-3">Precio</dt><dd class="col-sm-9">${{ producto.precio|floatformat:2 }}</dd>
+        <dt class="col-sm-3">Existencias</dt><dd class="col-sm-9">{{ producto.stock }}</dd>
+        <dt class="col-sm-3">Proveedor</dt><dd class="col-sm-9">{{ producto.proveedor|default:"—" }}</dd>
+        <dt class="col-sm-3">Estado</dt><dd class="col-sm-9">{% if producto.activo %}Activo{% else %}Inactivo{% endif %}</dd>
+    </dl>
+    <a class="btn btn-primary" href="{% url 'productos:editar' producto.pk %}">Editar</a>
+    <a class="btn btn-outline-danger" href="{% url 'productos:eliminar' producto.pk %}">Eliminar</a>
+    <a class="btn btn-link" href="{% url 'productos:lista' %}">Volver al inventario</a>
+</div>
+{% endblock %}

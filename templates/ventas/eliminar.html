@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Eliminar venta #{{ object.pk }}{% endblock %}
+{% block nav_ventas %}active{% endblock %}
+
+{% block content %}
+<div class="erp-card">
+    <div class="erp-card-header">Eliminar venta</div>
+    <h1 class="h3">¿Eliminar la venta #{{ object.pk }}?</h1>
+    <p>Los detalles asociados también se eliminarán.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Sí, eliminar</button>
+        <a class="btn btn-link" href="{% url 'ventas:detalle' object.pk %}">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

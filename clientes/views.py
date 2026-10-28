@@ -2,12 +2,14 @@
 """Vistas de la app clientes — W02 (placeholder)."""
 from django.shortcuts import render
 
+from .models import Cliente
+
 
 def index(request):
-    """Vista de índice de clientes."""
+    """Muestra la cartera de clientes."""
     context = {
         'titulo': 'Clientes',
         'descripcion': 'Gestión de cartera de clientes.',
-        'espiral': 'Espiral 2 · W04',
+        'clientes': Cliente.objects.all(),
     }
     return render(request, 'clientes/index.html', context)

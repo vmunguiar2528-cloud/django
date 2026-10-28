@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Ventas{% endblock %}
+{% block nav_ventas %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+    <h1 class="h2 mb-0">Ventas</h1>
+    <a class="btn btn-primary ms-auto" href="{% url 'ventas:crear' %}">Registrar venta</a>
+</div>
+<div class="erp-card">
+    <div class="erp-card-header">Historial de ventas</div>
+    {% if ventas %}
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Número</th><th>Cliente</th><th>Fecha</th><th>Total</th><th></th></tr></thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr>
+                    <td><a href="{% url 'ventas:detalle' venta.pk %}">#{{ venta.pk }}</a></td>
+                    <td>{{ venta.cliente }}</td>
+                    <td>{{ venta.fecha|date:"d/m/Y H:i" }}</td>
+                    <td>${{ venta.total|floatformat:2 }}</td>
+                    <td><a href="{% url 'ventas:detalle' venta.pk %}">Ver</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="mb-0">Todavía no hay ventas registradas.</p>
+    {% endif %}
+    {% if is_paginated %}
+    <nav aria-label="Paginación">
+        {% if page_obj.has_previous %}<a class="btn btn-outline-primary btn-sm" href="?page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
+        <span class="mx-2">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a class="btn btn-outline-primary btn-sm" href="?page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Venta #{{ venta.pk }}{% endblock %}
+{% block nav_ventas %}active{% endblock %}
+
+{% block content %}
+<div class="erp-card">
+    <div class="erp-card-header">Detalle de venta #{{ venta.pk }}</div>
+    <dl class="row">
+        <dt class="col-sm-3">Cliente</dt><dd class="col-sm-9">{{ venta.cliente }}</dd>
+        <dt class="col-sm-3">Fecha</dt><dd class="col-sm-9">{{ venta.fecha|date:"d/m/Y H:i" }}</dd>
+    </dl>
+    <h2 class="h4">Productos vendidos</h2>
+    {% if venta.detalles.all %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead><tr><th>Producto</th><th>Cantidad</th><th>Precio unitario</th><th>Subtotal</th></tr></thead>
+            <tbody>
+                {% for detalle in venta.detalles.all %}
+                <tr><td>{{ detalle.producto }}</td><td>{{ detalle.cantidad }}</td><td>${{ detalle.precio_unitario|floatformat:2 }}</td><td>${{ detalle.subtotal|floatformat:2 }}</td></tr>
+                {% endfor %}
+            </tbody>
+            <tfoot><tr><th colspan="3">Total</th><th>${{ venta.total|floatformat:2 }}</th></tr></tfoot>
+        </table>
+    </div>
+    {% else %}
+    <p>Esta venta no tiene productos asociados.</p>
+    {% endif %}
+    <a class="btn btn-outline-danger" href="{% url 'ventas:eliminar' venta.pk %}">Eliminar venta</a>
+    <a class="btn btn-link" href="{% url 'ventas:lista' %}">Volver al historial</a>
+</div>
+{% endblock %}
