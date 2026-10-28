@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Clientes{% endblock %}
+{% block nav_clientes %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+    <h1 class="h2 mb-0">Clientes</h1>
+    <span class="badge-erp-gold">{{ clientes|length }} registrados</span>
+</div>
+<div class="erp-card">
+    <div class="erp-card-header">Cartera de clientes</div>
+    <p>{{ descripcion }}</p>
+    {% if clientes %}
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Estado</th></tr></thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.nombre }}</td>
+                    <td><a href="mailto:{{ cliente.correo }}">{{ cliente.correo }}</a></td>
+                    <td>{{ cliente.telefono|default:"—" }}</td>
+                    <td>{% if cliente.activo %}Activo{% else %}Inactivo{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="mb-0">Todavía no hay clientes registrados.</p>
+    {% endif %}
+</div>
+{% endblock %}

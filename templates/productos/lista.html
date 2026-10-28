@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+    <h1 class="h2 mb-0">Productos</h1>
+    <a class="btn btn-primary ms-auto" href="{% url 'productos:crear' %}">Nuevo producto</a>
+</div>
+<div class="erp-card">
+    <div class="erp-card-header">Inventario</div>
+    {% if productos %}
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Proveedor</th><th></th></tr></thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td><a href="{% url 'productos:detalle' producto.pk %}">{{ producto.nombre }}</a></td>
+                    <td>{{ producto.categoria }}</td>
+                    <td>${{ producto.precio|floatformat:2 }}</td>
+                    <td>{{ producto.stock }}</td>
+                    <td>{{ producto.proveedor|default:"—" }}</td>
+                    <td><a href="{% url 'productos:editar' producto.pk %}">Editar</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="mb-0">No hay productos registrados.</p>
+    {% endif %}
+    {% if is_paginated %}
+    <nav aria-label="Paginación">
+        {% if page_obj.has_previous %}<a class="btn btn-outline-primary btn-sm" href="?page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
+        <span class="mx-2">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a class="btn btn-outline-primary btn-sm" href="?page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

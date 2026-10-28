@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Proveedores{% endblock %}
+{% block nav_proveedores %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+    <h1 class="h2 mb-0">Proveedores</h1>
+    <a class="btn btn-primary ms-auto" href="{% url 'proveedores:crear' %}">Nuevo proveedor</a>
+</div>
+<div class="erp-card">
+    <div class="erp-card-header">Directorio de proveedores</div>
+    {% if proveedores %}
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Nombre</th><th>Contacto</th><th>Correo</th><th>Teléfono</th><th></th></tr></thead>
+            <tbody>
+                {% for proveedor in proveedores %}
+                <tr>
+                    <td><a href="{% url 'proveedores:detalle' proveedor.pk %}">{{ proveedor.nombre }}</a></td>
+                    <td>{{ proveedor.contacto|default:"—" }}</td>
+                    <td><a href="mailto:{{ proveedor.correo }}">{{ proveedor.correo }}</a></td>
+                    <td>{{ proveedor.telefono|default:"—" }}</td>
+                    <td><a href="{% url 'proveedores:editar' proveedor.pk %}">Editar</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="mb-0">No hay proveedores activos registrados.</p>
+    {% endif %}
+    {% if is_paginated %}
+    <nav aria-label="Paginación">
+        {% if page_obj.has_previous %}<a class="btn btn-outline-primary btn-sm" href="?page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}
+        <span class="mx-2">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a class="btn btn-outline-primary btn-sm" href="?page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
