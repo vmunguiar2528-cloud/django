@@ -1,4 +1,14 @@
 # core/settings.py
+import dj_database_url
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
+}
+CSRF_TRUSTED_ORIGINS = ["https://django-3-6xgh.onrender.com"]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 import environ
 from pathlib import Path
 
@@ -9,12 +19,17 @@ env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env(BASE_DIR / '.env')
 
 SECRET_KEY  = env('SECRET_KEY', default='dev-key-insegura-solo-para-desarrollo')
-DEBUG       = env('DEBUG', default=True)
-ALLOWED_HOSTS = [
-    "django-3-6xgh.onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+CSRF_TRUSTED_ORIGINS = []
+
+RENDER_HOST = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_HOST:
+    ALLOWED_HOSTS.append(RENDER_HOST)
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_HOST}")
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # ── Apps instaladas ───────────────────────────────────────────────────────
 INSTALLED_APPS = [
@@ -67,12 +82,11 @@ TEMPLATES = [
 
 # ── Base de datos ─────────────────────────────────────────────────────────
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
-
 # ── Internacionalización ──────────────────────────────────────────────────
 LANGUAGE_CODE = 'es-mx'
 TIME_ZONE     = 'America/Mexico_City'
